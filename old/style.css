@@ -1,0 +1,146 @@
+@charset "utf-8";
+@font-face {
+    font-family: 'Kizami';
+    /*src: url('../fonts/font_1_kokumr_1.00_rls.ttf');*/
+    src: url('../../../fonts/kizami_light.eot') format("eot"), url('../../../fonts/kizami_light.woff') format("woff");
+}
+
+.material-icons.md-18 {
+    font-size: 18px;
+}
+
+.material-icons.md-24 {
+    font-size: 24px;
+}
+
+.material-icons.md-36 {
+    font-size: 36px;
+}
+
+.material-icons.md-48 {
+    font-size: 48px;
+}
+
+html, body, #title, #main, #now, #contents{
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    position: relative;
+    font-family: 'Kizami', 'Noto Sans JP', sans-serif;
+    font-feature-settings : "palt";
+    user-select: none;
+    /* cursor: default; */
+    background-color: #f8f4f4;
+    background-size: auto;
+}
+button {
+  cursor: pointer;
+}
+.hidden{
+    display: none;
+}
+/* #title .btn{
+    width: 90%;
+    max-width: 630px;
+} */
+#contents {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+#map,
+#pano {
+    width: 100%;
+}
+
+#map {
+    z-index: 5;
+    position: fixed;
+    top: 50%;
+    left: 0;
+    height: 50%;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .12), 0 2px 2px 0 rgba(0, 0, 0, .24);
+}
+
+#pano {
+    height: 100%;
+    z-index: 10;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#load {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    animation: 2.5s;
+    animation-iteration-count: infinite;
+    animation-name: flighting
+}
+
+@keyframes flighting {
+    0% {
+        padding: 0;
+    }
+    50% {
+        padding: 10px 0px 0px 0px;
+    }
+    100% {
+        padding: 0;
+    }
+}
+
+.air {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.air i{
+        transform: rotate(90deg);
+}
+
+/*FAB*/
+
+.sc_b {
+    position: fixed;
+    bottom: 0px;
+    left: 75px;
+    border-radius: 10% 10% 0 0;
+    transition: .3s;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .12), 0 2px 2px 0 rgba(0, 0, 0, .24);
+    z-index: 1000;
+}
+.sc_b i {
+    color: white;
+    line-height: 60px;
+    vertical-align: middle;
+}
+.btn-circle {
+    bottom: 20px;
+    right: 20px;
+    width: 56px;
+    height: 56px;
+    text-align: center;    
+    padding: 6px 0;
+    border-radius: 50%;
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,.12), 0 2px 2px 0 rgba(0,0,0,.24);
+    z-index: 1000;
+}
+.btn-fixed{
+    position: fixed;
+}
+
+.btn-circle i {
+  color: white;
+  vertical-align: middle;
+}
