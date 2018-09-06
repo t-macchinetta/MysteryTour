@@ -3,7 +3,7 @@
   "short_name": "MT",
   "theme_color": "#2196f3",
   "background_color": "#2196f3",
-  "start_url": "https://macchinetta.xyz/mysterytour",
+  "start_url": "https://macchinetta.xyz/mysterytour/",
   "display": "fullscreen",
   "orientation": "any",
   "icons": [

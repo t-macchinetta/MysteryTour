@@ -17,7 +17,7 @@
  *
  */
 /* eslint-env browser */
-$(function () {
+jQuery(function () {
     'use strict';
 
     // Check to make sure service workers are supported in the current browser,
@@ -102,11 +102,11 @@ $(function () {
             lon = -lon;
         }
         // 座標決定
-        randFenway = {
+        var latlng = {
             lat: lat,
             lng: lon
         };
-        return randFenway;
+        return latlng;
     }
 
     // ストリートビューと地図を表示する関数(引数は座標)
