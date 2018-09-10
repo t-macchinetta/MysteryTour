@@ -46,13 +46,13 @@ $(window).on('load', function () {
     var $favorite = $('#favorite');
     var $add = $('#add');
     var speed = 300;
-    var now_place;
     var map;
     var panorama;
-    var status = 0;
     var geocoder = new google.maps.Geocoder();
     var db = firebase.firestore();
-    const settings = {/* your settings... */ timestampsInSnapshots: true };
+    var settings = {
+        timestampsInSnapshots: true
+    };
     db.settings(settings);
     var posRef = db.collection('latlng');
 
@@ -150,7 +150,7 @@ $(window).on('load', function () {
         mapsTrip();
     });
 
-    // マップ表示切り替え
+    // マップ表示非表示切り替え
     $map_toggle.on('click', function () {
         $map.toggleClass('z_1000');
     });
@@ -224,6 +224,7 @@ $(window).on('load', function () {
             return false;
         }
     });
+
     // データの監視
     posRef.orderBy('timestamp', 'desc').onSnapshot(function (querySnapshot) {
         var str = "";
@@ -244,9 +245,6 @@ $(window).on('load', function () {
     });
 
     // モーダル
-    // $('#openModal').click(function () {
-    //     $('#modalArea').fadeIn();
-    // });
     $('#closeModal, #back, #modalBg').click(function () {
         $('#modalArea').fadeOut();
     });
