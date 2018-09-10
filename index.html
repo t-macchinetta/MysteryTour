@@ -45,6 +45,8 @@
 
 <body>
   <!-- Add your site or app content here -->
+
+  <!-- 初期画面 -->
   <section id="ready">
     <h1 class="title">
       Mystery Tour
@@ -54,15 +56,18 @@
     </button>
   </section>
 
+  <!-- ローディング画面 -->
   <section id="loading" class="hidden">
     <i class="material-icons rot">autorenew</i>
   </section>
 
+  <!-- 表示エリア -->
   <section id="output" class="hidden">
     <div id="pano"></div>
     <div id="map" class="t100"></div>
   </section>
 
+  <!-- ボタン -->
   <section id="tool" class="hidden">
     <button id="start">
       <i class="material-icons">flight_takeoff</i>
@@ -75,9 +80,37 @@
     </button>
   </section>
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAe_w3kQXOsgBya34aX5toPIdTBuS4aIjs"></script>
+  <!-- モーダルエリア -->
+  <section id="modalArea" class="modalArea">
+    <div id="modalBg" class="modalBg"></div>
+    <div class="modalWrapper">
+      <div class="modalContents">
+        <h1></h1>
+        <p></p>
+      </div>
+      <div id="closeModal" class="closeModal">
+        ×
+      </div>
+    </div>
+  </section>
 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <!-- map -->
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA1Xd3oiuXW_0dQxAi46m1GBzqnDnw8Xvo"></script>
+  <!-- firebase -->
+  <script src="https://www.gstatic.com/firebasejs/5.4.2/firebase.js"></script>
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyDKY31oPOpaZAMpBMzB6bO-5dWsKEvZ90o",
+      authDomain: "test-26f55.firebaseapp.com",
+      databaseURL: "https://test-26f55.firebaseio.com",
+      projectId: "test-26f55",
+      storageBucket: "test-26f55.appspot.com",
+      messagingSenderId: "643783646173"
+    };
+    firebase.initializeApp(config);
+  </script>
   <!-- build:js scripts/main.min.js -->
   <script src="scripts/main.js"></script>
   <!-- endbuild -->

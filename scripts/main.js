@@ -50,6 +50,11 @@ $(window).on('load', function () {
     var panorama;
     var status = 0;
     var geocoder = new google.maps.Geocoder();
+    var db = firebase.firestore();
+    const settings = {/* your settings... */ timestampsInSnapshots: true };
+    db.settings(settings);
+    var posRef = db.collection('latlng');
+
 
     // 緯度経度を乱数で決定する関数
     function getPlace() {
@@ -148,6 +153,7 @@ $(window).on('load', function () {
         $map.toggleClass('z_1000');
     });
 
+    // お気に入り関連
     $favorite.on('click', function () {
         var now_center = panorama.getPosition();
         var f_pos = { lat: now_center.lat(), lng: now_center.lng() }
@@ -160,10 +166,45 @@ $(window).on('load', function () {
                     var address = results[0].formatted_address;
                     console.log(f_pos);
                     console.log(address);
+                    // $('#modalArea').fadeIn();
+                    // $('.modalContents>h1').text(address);
+                    // $('.modalContents>p').text(`${f_pos.lat},${f_pos.lng}`);
+
+                    posRef.add({
+                        user: "",
+                        title: 'hogehoge',
+                        address: address,
+                        position: f_pos,
+                        timestamp: Date.now()
+                    });
+                    // }).then(() => {
+                    //     console.log('success');
+                    // }).catch(error => {
+                    //     console.error(error);
+                    // });
                 }
             }
         });
     });
+
+    // データの監視
+    posRef.onSnapshot(function (querySnapshot) {
+        console.log('changed');
+        // var cities = [];
+        // querySnapshot.forEach(function (doc) {
+        //     cities.push(doc.data().name);
+        // });
+        // console.log("Current cities in CA: ", cities.join(", "));
+    });
+
+    // モーダル
+    $('#openModal').click(function () {
+        $('#modalArea').fadeIn();
+    });
+    $('#closeModal , #modalBg').click(function () {
+        $('#modalArea').fadeOut();
+    });
+
 });
 
 
