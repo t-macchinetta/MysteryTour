@@ -162,6 +162,7 @@ $(window).on('load', function () {
 
     // お気に入り追加
     $add.on('click', function () {
+        $('.super_modal').removeClass('hidden');
         // 表示している場所の座標を取得
         var now_center = panorama.getPosition();
         var f_pos = { lat: now_center.lat(), lng: now_center.lng() }
@@ -181,7 +182,9 @@ $(window).on('load', function () {
                         position: f_pos,
                         timestamp: Date.now()
                     }).then(() => {
-                        console.log('success');
+                        alert('added!!');
+                        $('#modalArea').fadeOut();
+                        $('.super_modal').addClass('hidden');
                     }).catch(error => {
                         console.error(error);
                     });
@@ -197,15 +200,38 @@ $(window).on('load', function () {
         var lng = $('#' + id).find('#lng').text();
         panorama.setPosition(new google.maps.LatLng(lat, lng));
         map.panTo(new google.maps.LatLng(lat, lng));
+        $('#modalArea').fadeOut();
     });
-
+    // 削除
+    $('#modalArea').on('click', '.delete', function (e) {
+        if (confirm('削除しますか??')) {
+            $('.super_modal').removeClass('hidden');
+            var id = $(this).parent().parent().attr('id');
+            posRef.doc(id).delete().then(function () {
+                alert("deleted!!");
+                $('.super_modal').addClass('hidden');
+                e.stopPropagation();
+            }).catch(function (error) {
+                alert("Error removing document: ", error);
+                e.stopPropagation();
+            });
+            e.stopPropagation();
+        } else {
+            e.stopPropagation();
+            return false;
+        }
+    });
     // データの監視
     posRef.onSnapshot(function (querySnapshot) {
         var str = "";
         querySnapshot.forEach(function (doc) {
             str +=
                 `<div id="${doc.id}" class="card">
-                    <h2 class="title">${doc.data().title}</h2>
+                    <div class="title_wrap">
+                        <h2 class="title">${doc.data().title}</h2>
+                        <h2 class="edit"><i class="material-icons">edit</i>&nbsp;&nbsp;</h2>
+                        <h2 class="delete">&nbsp;&nbsp;<i class="material-icons">delete</i></h2>
+                    </div>
                     <p class="address">${doc.data().address}</p>
                     <p class="position">lat:<span id="lat">${doc.data().position.lat}</span> lng:<span id="lng">${doc.data().position.lng}</span></p>
                     <p class="user">${doc.data().user}</p>
@@ -218,7 +244,7 @@ $(window).on('load', function () {
     // $('#openModal').click(function () {
     //     $('#modalArea').fadeIn();
     // });
-    $('#closeModal , #modalBg').click(function () {
+    $('#closeModal, #back, #modalBg').click(function () {
         $('#modalArea').fadeOut();
     });
 
