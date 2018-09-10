@@ -195,13 +195,16 @@ $(window).on('load', function () {
 
     // お気に入りクリック時に移動
     $('#modalArea').on('click', '.card', function () {
+        $('.super_modal').removeClass('hidden');
         var id = $(this).attr('id');
         var lat = $('#' + id).find('#lat').text();
         var lng = $('#' + id).find('#lng').text();
         panorama.setPosition(new google.maps.LatLng(lat, lng));
         map.panTo(new google.maps.LatLng(lat, lng));
         $('#modalArea').fadeOut();
+        $('.super_modal').addClass('hidden');
     });
+
     // 削除
     $('#modalArea').on('click', '.delete', function (e) {
         if (confirm('削除しますか??')) {
@@ -222,7 +225,7 @@ $(window).on('load', function () {
         }
     });
     // データの監視
-    posRef.onSnapshot(function (querySnapshot) {
+    posRef.orderBy('timestamp', 'desc').onSnapshot(function (querySnapshot) {
         var str = "";
         querySnapshot.forEach(function (doc) {
             str +=
