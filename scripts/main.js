@@ -44,6 +44,7 @@ $(window).on('load', function () {
     var $start = $('#start');
     var $map_toggle = $('#map_toggle');
     var $favorite = $('#favorite');
+    var $add = $('#add');
     var speed = 300;
     var now_place;
     var map;
@@ -155,6 +156,15 @@ $(window).on('load', function () {
 
     // お気に入り関連
     $favorite.on('click', function () {
+        $('#modalArea').fadeIn();
+        console.log(map);
+        console.log(panorama);
+        panorama.setPosition(new google.maps.LatLng(43.062092171763695, 141.35175298175355));
+        map.panTo(new google.maps.LatLng(43.062092171763695, 141.35175298175355));
+    });
+
+    // お気に入り追加
+    $add.on('click', function () {
         var now_center = panorama.getPosition();
         var f_pos = { lat: now_center.lat(), lng: now_center.lng() }
         // 座標から住所を取得
@@ -164,24 +174,18 @@ $(window).on('load', function () {
             if (status == google.maps.GeocoderStatus.OK) {
                 if (results[0].geometry) {
                     var address = results[0].formatted_address;
-                    console.log(f_pos);
-                    console.log(address);
-                    // $('#modalArea').fadeIn();
-                    // $('.modalContents>h1').text(address);
-                    // $('.modalContents>p').text(`${f_pos.lat},${f_pos.lng}`);
-
+                    // firestoreに追加
                     posRef.add({
                         user: "",
                         title: 'hogehoge',
                         address: address,
                         position: f_pos,
                         timestamp: Date.now()
+                    }).then(() => {
+                        console.log('success');
+                    }).catch(error => {
+                        console.error(error);
                     });
-                    // }).then(() => {
-                    //     console.log('success');
-                    // }).catch(error => {
-                    //     console.error(error);
-                    // });
                 }
             }
         });
@@ -189,12 +193,21 @@ $(window).on('load', function () {
 
     // データの監視
     posRef.onSnapshot(function (querySnapshot) {
-        console.log('changed');
+        // console.log('changed');
         // var cities = [];
-        // querySnapshot.forEach(function (doc) {
-        //     cities.push(doc.data().name);
-        // });
-        // console.log("Current cities in CA: ", cities.join(", "));
+        var str = "";
+        querySnapshot.forEach(function (doc) {
+            str +=
+                `<div id="${doc.id}">
+                    <h2 class="title">${doc.data().title}</h2>
+                    <p class="address">${doc.data().address}</p>
+                    <p class="position">lat:${doc.data().position.lat} lng:${doc.data().position.lng}</p>
+                    <p class="user">${doc.data().user}</p>
+                </div>`;
+            // console.log(doc.id);
+            // console.log(doc.data().address);
+        });
+        $('#fav_pos').html(str);
     });
 
     // モーダル
