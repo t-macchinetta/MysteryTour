@@ -157,10 +157,6 @@ $(window).on('load', function () {
     // お気に入り関連
     $favorite.on('click', function () {
         $('#modalArea').fadeIn();
-        console.log(map);
-        console.log(panorama);
-        panorama.setPosition(new google.maps.LatLng(43.062092171763695, 141.35175298175355));
-        map.panTo(new google.maps.LatLng(43.062092171763695, 141.35175298175355));
     });
 
     // お気に入り追加
@@ -191,6 +187,15 @@ $(window).on('load', function () {
         });
     });
 
+    // お気に入りクリック時に移動
+    $('#modalArea').on('click', '.card', function () {
+        var id = $(this).attr('id');
+        var lat = $('#' + id).find('#lat').text();
+        var lng = $('#' + id).find('#lng').text();
+        panorama.setPosition(new google.maps.LatLng(lat, lng));
+        map.panTo(new google.maps.LatLng(lat, lng));
+    });
+
     // データの監視
     posRef.onSnapshot(function (querySnapshot) {
         // console.log('changed');
@@ -198,10 +203,10 @@ $(window).on('load', function () {
         var str = "";
         querySnapshot.forEach(function (doc) {
             str +=
-                `<div id="${doc.id}">
+                `<div id="${doc.id}" class="card">
                     <h2 class="title">${doc.data().title}</h2>
                     <p class="address">${doc.data().address}</p>
-                    <p class="position">lat:${doc.data().position.lat} lng:${doc.data().position.lng}</p>
+                    <p class="position">lat:<span id="lat">${doc.data().position.lat}</span> lng:<span id="lng">${doc.data().position.lng}</span></p>
                     <p class="user">${doc.data().user}</p>
                 </div>`;
             // console.log(doc.id);
