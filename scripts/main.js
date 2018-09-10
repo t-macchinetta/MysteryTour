@@ -134,13 +134,14 @@ $(window).on('load', function () {
         });
     }
 
+    // 最初の画面でスタート
     $go.on('click', function () {
         $ready.fadeOut(speed);
         $loading.fadeIn(speed);
         mapsTrip()
     });
 
-    // スタート
+    // スタートボタン
     $start.on('click', function () {
         $output.hide(speed);
         $tool.hide(speed);
@@ -154,13 +155,14 @@ $(window).on('load', function () {
         $map.toggleClass('z_1000');
     });
 
-    // お気に入り関連
+    // お気に入り表示
     $favorite.on('click', function () {
         $('#modalArea').fadeIn();
     });
 
     // お気に入り追加
     $add.on('click', function () {
+        // 表示している場所の座標を取得
         var now_center = panorama.getPosition();
         var f_pos = { lat: now_center.lat(), lng: now_center.lng() }
         // 座標から住所を取得
@@ -169,6 +171,7 @@ $(window).on('load', function () {
         }, function (results, status) {
             if (status == google.maps.GeocoderStatus.OK) {
                 if (results[0].geometry) {
+                    // 住所を取得
                     var address = results[0].formatted_address;
                     // firestoreに追加
                     posRef.add({
@@ -198,8 +201,6 @@ $(window).on('load', function () {
 
     // データの監視
     posRef.onSnapshot(function (querySnapshot) {
-        // console.log('changed');
-        // var cities = [];
         var str = "";
         querySnapshot.forEach(function (doc) {
             str +=
@@ -209,16 +210,14 @@ $(window).on('load', function () {
                     <p class="position">lat:<span id="lat">${doc.data().position.lat}</span> lng:<span id="lng">${doc.data().position.lng}</span></p>
                     <p class="user">${doc.data().user}</p>
                 </div>`;
-            // console.log(doc.id);
-            // console.log(doc.data().address);
         });
         $('#fav_pos').html(str);
     });
 
     // モーダル
-    $('#openModal').click(function () {
-        $('#modalArea').fadeIn();
-    });
+    // $('#openModal').click(function () {
+    //     $('#modalArea').fadeIn();
+    // });
     $('#closeModal , #modalBg').click(function () {
         $('#modalArea').fadeOut();
     });
