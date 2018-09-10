@@ -1,4 +1,4 @@
-jQuery(function () {
+$(window).on('load', function () {
     'use strict';
     var isLocalhost = Boolean(window.location.hostname === 'localhost' ||
         window.location.hostname === '[::1]' ||
@@ -43,7 +43,13 @@ jQuery(function () {
     var $go = $('#go');
     var $start = $('#start');
     var $map_toggle = $('#map_toggle');
+    var $favorite = $('#favorite');
     var speed = 300;
+    var now_place;
+    var map;
+    var panorama;
+    var status = 0;
+    var geocoder = new google.maps.Geocoder();
 
     // 緯度経度を乱数で決定する関数
     function getPlace() {
@@ -68,7 +74,7 @@ jQuery(function () {
 
     // ストリートビューと地図を表示する関数(引数は座標)
     function initialize(fenway) {
-        var map = new google.maps.Map(document.getElementById('map'), {
+        map = new google.maps.Map(document.getElementById('map'), {
             center: fenway,
             zoom: 6,
             scaleControl: true,
@@ -78,7 +84,7 @@ jQuery(function () {
                 position: google.maps.ControlPosition.LEFT_TOP,
             }
         });
-        var panorama = new google.maps.StreetViewPanorama(
+        panorama = new google.maps.StreetViewPanorama(
             document.getElementById('pano'), {
                 position: fenway,
                 pov: {
@@ -104,7 +110,7 @@ jQuery(function () {
         var randFenway = getPlace();
         // ストリートビューがあるかどうか確認
         var svs = new google.maps.StreetViewService();
-        svs.getPanoramaByLocation(randFenway, 500, function (result, status) {
+        svs.getPanoramaByLocation(randFenway, 5000, function (result, status) {
             if (status == google.maps.StreetViewStatus.OK) {
                 //ストリートビューがあれば座標を設定
                 var fenway = result.location.latLng;
@@ -113,6 +119,8 @@ jQuery(function () {
                 $output.fadeIn(speed);
                 $tool.fadeIn(speed);
                 initialize(fenway);
+                now_place = result.location;
+                status = 1;
             } else {
                 // なければやり直し
                 mapsTrip();
@@ -123,7 +131,7 @@ jQuery(function () {
     $go.on('click', function () {
         $ready.fadeOut(speed);
         $loading.fadeIn(speed);
-        mapsTrip();
+        mapsTrip()
     });
 
     // スタート
@@ -140,6 +148,22 @@ jQuery(function () {
         $map.toggleClass('z_1000');
     });
 
+    $favorite.on('click', function () {
+        var now_center = panorama.getPosition();
+        var f_pos = { lat: now_center.lat(), lng: now_center.lng() }
+        // 座標から住所を取得
+        geocoder.geocode({
+            latLng: f_pos
+        }, function (results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                if (results[0].geometry) {
+                    var address = results[0].formatted_address;
+                    console.log(f_pos);
+                    console.log(address);
+                }
+            }
+        });
+    });
 });
 
 
