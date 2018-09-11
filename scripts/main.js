@@ -45,6 +45,7 @@ $(window).on('load', function () {
     var $map_toggle = $('#map_toggle');
     var $favorite = $('#favorite');
     var $add = $('#add');
+    var now_place;
     var speed = 300;
     var map;
     var panorama;
