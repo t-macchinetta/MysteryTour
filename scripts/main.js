@@ -143,6 +143,30 @@ $(window).on('load', function () {
             }
         });
     }
+    function mapsMove() {
+        //座標をランダムに生成する関数
+        var randFenway = getPlace();
+        // ストリートビューがあるかどうか確認
+        var svs = new google.maps.StreetViewService();
+        svs.getPanoramaByLocation(randFenway, 5000, function (result, status) {
+            if (status == google.maps.StreetViewStatus.OK) {
+                //ストリートビューがあれば座標を設定
+                var fenway = result.location.latLng;
+                // 表示
+                // $loading.fadeOut(speed);
+                $output.fadeIn(speed);
+                $tool.fadeIn(speed);
+                panorama.setPosition(new google.maps.LatLng(fenway.lat(), fenway.lng()));
+                map.panTo(new google.maps.LatLng(fenway.lat(), fenway.lng()));
+                now_place = result.location;
+                status = 1;
+                $loading.fadeOut(speed);
+            } else {
+                // なければやり直し
+                mapsMove();
+            }
+        });
+    }
 
     // 最初の画面でスタート
     $go.on('click', function () {
@@ -157,7 +181,7 @@ $(window).on('load', function () {
         $tool.hide(speed);
         $loading.fadeIn(speed);
         $map.removeClass('z_1000');
-        mapsTrip();
+        mapsMove();
     });
 
     // マップ表示非表示切り替え
