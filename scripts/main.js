@@ -33,6 +33,22 @@ $(window).on('load', function () {
 
     // Your custom JavaScript goes here
 
+    myEnter();
+
+    // パスワード入力用
+    function myEnter() {
+        var pass = prompt("パスワードを入力してください", "");
+        var shaObj = new jsSHA("SHA-512", "TEXT");
+        shaObj.update(pass);
+        var passhash = shaObj.getHash("HEX");
+
+        if (passhash == "89bf58d90108fefc0290cd9eabc93534e4ca4b42471d92046ca8063be851c021fd59f37953b984b46395f278c15b8cf0bfc5affb5dcb50b6e6f6cc7ed343ba1e") {
+            $('body').removeClass('hidden');
+        } else {
+            $('body').addClass('hidden');
+        }
+    }
+
     // 要素の変数を準備
     var $ready = $('#ready');
     var $loading = $('#loading');
