@@ -49,7 +49,9 @@ $(window).on('load', function () {
     var $title_input = $('#title_input');
     var $add = $('#add');
     var $done = $('#done');
-    var $cancel = $('#cancel');
+    var $cancel = $('.cancel');
+    var $edit_window = $('#edit_window');
+    var $set = $('#set');
     var now_place;
     var speed = 300;
     var map;
@@ -172,6 +174,7 @@ $(window).on('load', function () {
         $add_window.removeClass('hidden');
     });
 
+    // タイトル入力のバリデーション
     $title_input.on('keyup', function () {
         if ($title_input.val() == "") {
             $done.prop('disabled', true);
@@ -184,6 +187,7 @@ $(window).on('load', function () {
     $cancel.on('click', function () {
         $favorite_window.removeClass('hidden');
         $add_window.addClass('hidden');
+        $edit_window.addClass('hidden');
     });
 
     // お気に入り追加
@@ -232,6 +236,15 @@ $(window).on('load', function () {
         map.panTo(new google.maps.LatLng(lat, lng));
         $('#modalArea').fadeOut();
         $('.super_modal').addClass('hidden');
+    });
+
+    // 編集
+    $('#modalArea').on('click', '.edit', function (e) {
+        var id = $(this).parent().parent().attr('id');
+        var title = $(`#${id} .title`).text();
+        $favorite_window.addClass('hidden');
+        $edit_window.removeClass('hidden');
+        e.stopPropagation();
     });
 
     // 削除

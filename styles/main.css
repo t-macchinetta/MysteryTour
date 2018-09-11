@@ -164,7 +164,7 @@ button {
     display: flex;
     justify-content: space-around;
 }
-#add,#back,#done,#cancel{
+#add,#back,#done,.cancel{
     width: 40%;
     min-width: 56px;
 }

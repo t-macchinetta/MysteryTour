@@ -101,12 +101,21 @@
         <input type="text" id="title_input">
       </div>
       <div id="btn">
-        <button id="cancel"><i class="material-icons">arrow_back</i></button>
+        <button class="cancel"><i class="material-icons">arrow_back</i></button>
         <button id="done" disabled><i class="material-icons">done</i></button>
       </div>
-      <!-- <div id="closeModal" class="closeModal">
-        ×
-      </div> -->
+    </div>
+    <div class="modalWrapper hidden" id="edit_window">
+      <div class="modalContents input_content">
+        <h2 class="title_edit">タイトルを編集してください*</h2>
+        <input type="text" id="title_input">
+        <p id="address"></p>
+        <p id="latlng"></p>
+      </div>
+      <div id="btn">
+        <button class="cancel"><i class="material-icons">arrow_back</i></button>
+        <button id="done" disabled><i class="material-icons">done</i></button>
+      </div>
     </div>
 
   </section>
