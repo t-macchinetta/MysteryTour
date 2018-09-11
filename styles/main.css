@@ -168,6 +168,17 @@ button {
     width: 40%;
     min-width: 56px;
 }
+.input_content{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+#title_input{
+    width: 90%;
+    height: 40px;
+    font-size: 2.7vw;
+}
 .super_modal{
     width: 100%;
     height: 100%;
