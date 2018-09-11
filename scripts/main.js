@@ -41,7 +41,6 @@ $(window).on('load', function () {
         var shaObj = new jsSHA("SHA-512", "TEXT");
         shaObj.update(pass);
         var passhash = shaObj.getHash("HEX");
-
         if (passhash == "89bf58d90108fefc0290cd9eabc93534e4ca4b42471d92046ca8063be851c021fd59f37953b984b46395f278c15b8cf0bfc5affb5dcb50b6e6f6cc7ed343ba1e") {
             $('body').removeClass('hidden');
         } else {
