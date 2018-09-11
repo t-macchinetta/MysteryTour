@@ -242,10 +242,18 @@ $(window).on('load', function () {
     $('#modalArea').on('click', '.edit', function (e) {
         var id = $(this).parent().parent().attr('id');
         var title = $(`#${id} .title`).text();
+        var address = $(`#${id} .address`).text();
+        var latlng = $(`#${id} .position`).text();
         $favorite_window.addClass('hidden');
         $edit_window.removeClass('hidden');
+        $('#title_edit').val(title);
+        $('#address').text(address);
+        $('#latlng').text(latlng);
         e.stopPropagation();
     });
+
+    // 更新
+
 
     // 削除
     $('#modalArea').on('click', '.delete', function (e) {
