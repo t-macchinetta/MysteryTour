@@ -41,7 +41,7 @@ $(window).on('load', function () {
         var shaObj = new jsSHA("SHA-512", "TEXT");
         shaObj.update(pass);
         var passhash = shaObj.getHash("HEX");
-        if (passhash == "89bf58d90108fefc0290cd9eabc93534e4ca4b42471d92046ca8063be851c021fd59f37953b984b46395f278c15b8cf0bfc5affb5dcb50b6e6f6cc7ed343ba1e") {
+        if (passhash == "89bf58d90108fefc0290cd9eabc93534e4ca4b42471d92046ca8063be851c021fd59f37953b984b46395f278c15b8cf0bfc5affb5dcb50b6e6f6cc7ed343ba1e" || passhash == "df0fade2fd98ee239694819bfa184b432cbea6cc7d4801a8f07fece37e423c8c1eb76bb0c85cd07d76ef179996de66e913dd90b87bb3dac0b91df09fc99ddabe") {
             $('body').removeClass('hidden');
         } else {
             $('body').addClass('hidden');
