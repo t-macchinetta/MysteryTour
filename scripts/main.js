@@ -44,7 +44,12 @@ $(window).on('load', function () {
     var $start = $('#start');
     var $map_toggle = $('#map_toggle');
     var $favorite = $('#favorite');
+    var $favorite_window = $('#favorite_window');
+    var $add_window = $('#add_window');
+    var $title_input = $('#title_input');
     var $add = $('#add');
+    var $done = $('#done');
+    var $cancel = $('#cancel');
     var now_place;
     var speed = 300;
     var map;
@@ -161,8 +166,28 @@ $(window).on('load', function () {
         $('#modalArea').fadeIn();
     });
 
-    // お気に入り追加
+    // 追加ボタンで入力画面表示
     $add.on('click', function () {
+        $favorite_window.addClass('hidden');
+        $add_window.removeClass('hidden');
+    });
+
+    $title_input.on('keyup', function () {
+        if ($title_input.val() == "") {
+            $done.prop('disabled', true);
+        } else {
+            $done.prop('disabled', false);
+        }
+    });
+
+    // 追加キャンセル
+    $cancel.on('click', function () {
+        $favorite_window.removeClass('hidden');
+        $add_window.addClass('hidden');
+    });
+
+    // お気に入り追加
+    $done.on('click', function () {
         $('.super_modal').removeClass('hidden');
         // 表示している場所の座標を取得
         var now_center = panorama.getPosition();
@@ -178,13 +203,16 @@ $(window).on('load', function () {
                     // firestoreに追加
                     posRef.add({
                         user: "",
-                        title: 'hogehoge',
+                        title: $title_input.val(),
                         address: address,
                         position: f_pos,
                         timestamp: Date.now()
                     }).then(() => {
                         alert('added!!');
                         $('#modalArea').fadeOut();
+                        $title_input.val("");
+                        $favorite_window.removeClass('hidden');
+                        $add_window.addClass('hidden');
                         $('.super_modal').addClass('hidden');
                     }).catch(error => {
                         console.error(error);

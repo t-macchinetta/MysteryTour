@@ -83,7 +83,7 @@
   <!-- モーダルエリア -->
   <section id="modalArea" class="modalArea">
     <div id="modalBg" class="modalBg"></div>
-    <div class="modalWrapper">
+    <div class="modalWrapper" id="favorite_window">
       <div class="modalContents" id="fav_pos">
         <!-- コンテンツエリア -->
       </div>
@@ -95,6 +95,20 @@
         ×
       </div>
     </div>
+    <div class="modalWrapper hidden" id="add_window">
+      <div class="modalContents">
+        <h2 class="title">タイトルを入力してください*</h2>
+        <input type="text" id="title_input">
+      </div>
+      <div id="btn">
+        <button id="cancel"><i class="material-icons">arrow_back</i></button>
+        <button id="done" disabled><i class="material-icons">done</i></button>
+      </div>
+      <!-- <div id="closeModal" class="closeModal">
+        ×
+      </div> -->
+    </div>
+
   </section>
   <section class="super_modal hidden"></section>
 
