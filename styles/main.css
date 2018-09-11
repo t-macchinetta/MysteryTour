@@ -160,11 +160,11 @@ button {
   right: 1rem;
   cursor: pointer;
 }
-#btn{
+.btn{
     display: flex;
     justify-content: space-around;
 }
-#add,#back,#done,.cancel{
+#add,#back,#done,.cancel,#set{
     width: 40%;
     min-width: 56px;
 }

@@ -51,8 +51,10 @@ $(window).on('load', function () {
     var $done = $('#done');
     var $cancel = $('.cancel');
     var $edit_window = $('#edit_window');
+    var $title_edit = $('#title_edit');
     var $set = $('#set');
     var now_place;
+    var now_id = "";
     var speed = 300;
     var map;
     var panorama;
@@ -240,10 +242,10 @@ $(window).on('load', function () {
 
     // 編集
     $('#modalArea').on('click', '.edit', function (e) {
-        var id = $(this).parent().parent().attr('id');
-        var title = $(`#${id} .title`).text();
-        var address = $(`#${id} .address`).text();
-        var latlng = $(`#${id} .position`).text();
+        now_id = $(this).parent().parent().attr('id');
+        var title = $(`#${now_id} .title`).text();
+        var address = $(`#${now_id} .address`).text();
+        var latlng = $(`#${now_id} .position`).text();
         $favorite_window.addClass('hidden');
         $edit_window.removeClass('hidden');
         $('#title_edit').val(title);
@@ -252,8 +254,33 @@ $(window).on('load', function () {
         e.stopPropagation();
     });
 
-    // 更新
+    // 編集時の入力バリデーション
+    $title_edit.on('keyup', function () {
+        if ($title_edit.val() == "") {
+            $done.prop('disabled', true);
+        } else {
+            $done.prop('disabled', false);
+        }
+    });
 
+    // 更新
+    $('#modalArea').on('click', '#set', function (e) {
+        $('.super_modal').removeClass('hidden');
+        var title = $('#title_edit').val();
+        // 情報を更新する．オプションで既存の他データを変更しないようにする
+        posRef.doc(now_id).set({
+            title: title
+        }, { merge: true }).then(() => {
+            alert('changed!!');
+            $title_edit.val("");
+            $favorite_window.removeClass('hidden');
+            $edit_window.addClass('hidden');
+            $('.super_modal').addClass('hidden');
+        }).catch(error => {
+            console.error(error);
+        });;
+        now_id = "";
+    });
 
     // 削除
     $('#modalArea').on('click', '.delete', function (e) {
@@ -294,7 +321,7 @@ $(window).on('load', function () {
         $('#fav_pos').html(str);
     });
 
-    // モーダル
+    // モーダル非表示
     $('#closeModal, #back, #modalBg').click(function () {
         $('#modalArea').fadeOut();
     });
