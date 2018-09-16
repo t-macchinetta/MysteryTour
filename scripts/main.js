@@ -33,6 +33,7 @@ $(window).on('load', function () {
 
     // Your custom JavaScript goes here
 
+    // パスワード入力関数実行
     myEnter();
 
     // パスワード入力用
