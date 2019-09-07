@@ -128,18 +128,20 @@
   <!-- map -->
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA1Xd3oiuXW_0dQxAi46m1GBzqnDnw8Xvo"></script>
   <!-- firebase -->
-  <script src="https://www.gstatic.com/firebasejs/5.4.2/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/6.6.0/firebase-app.js"></script>
   <script>
-    // Initialize Firebase
-    var config = {
-      apiKey: "AIzaSyDKY31oPOpaZAMpBMzB6bO-5dWsKEvZ90o",
-      authDomain: "test-26f55.firebaseapp.com",
-      databaseURL: "https://test-26f55.firebaseio.com",
-      projectId: "test-26f55",
-      storageBucket: "test-26f55.appspot.com",
-      messagingSenderId: "643783646173"
+    var firebaseConfig = {
+      // Initialize Firebase
+      apiKey: "AIzaSyAndplmHLrRdyDK8CEvK-vHea8lQIX_k-A",
+      authDomain: "mysterytour-216007.firebaseapp.com",
+      databaseURL: "https://mysterytour-216007.firebaseio.com",
+      projectId: "mysterytour-216007",
+      storageBucket: "mysterytour-216007.appspot.com",
+      messagingSenderId: "1060078206004",
+      appId: "1:1060078206004:web:f38b25339a8d8017641e61"
     };
-    firebase.initializeApp(config);
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
   </script>
   <!-- build:js scripts/main.min.js -->
   <script src="scripts/main.js"></script>
