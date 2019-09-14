@@ -6,132 +6,227 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-  <title>Mystery Tour</title>
-  <link rel="icon" href="images/icons/favicon.ico type=" image/png" />
-
-  <!-- Disable tap highlight on IE -->
-  <meta name="msapplication-tap-highlight" content="no">
-
-  <!-- Web Application Manifest -->
+  <title>mysteryTour</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="/img/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/img/icons/favicon-16x16.png">
+  <link rel="apple-touch-icon" href="/img/icons/apple-touch-icon-152x152.png">
+  <link rel="mask-icon" href="/img/icons/safari-pinned-tab.svg" color="#4DBA87">
+  <meta name="msapplication-TileImage" content="/img/icons/msapplication-icon-144x144.png">
   <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+  <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+  <style>
+    body {
+      background: #000;
+    }
 
-  <!-- Add to homescreen for Chrome on Android -->
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="application-name" content="Web Starter Kit">
-  <link rel="icon" sizes="192x192" href="images/icons/android-chrome-192x192.png">
+    #app {
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      /* font-family: 'Kizami', '游明朝', YuMincho, 'ヒラギノ明朝 ProN W3' , 'HiraMinProN-W3' ,'メイリオ', Meiryo, serif!important; */
+      font-feature-settings: "palt";
+      font-size: 3.5vmin;
+      font-weight: 600;
+    }
 
-  <!-- Add to homescreen for Safari on iOS -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="Web Starter Kit">
-  <link rel="apple-touch-icon" href="images/icons/apple-touch-icon.png">
+    #modal,
+    #firstView {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      position: fixed;
+      top: 0;
+      left: 0;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: lightgoldenrodyellow;
+      background: none #000;
+      border: 0;
+    }
 
-  <!-- Tile icon for Win8 (144x144 + tile color) -->
-  <meta name="msapplication-TileImage" content="images/icons/mstile-144x144.png">
-  <meta name="msapplication-TileColor" content="#2F3BA2">
+    #modal {
+      z-index: 1000000;
+    }
 
-  <!-- Color the status bar on mobile devices -->
-  <meta name="theme-color" content="#2F3BA2">
+    #firstView {
+      z-index: 100000;
+    }
 
-  <!-- SEO: If your mobile URL is different from the desktop URL, add a canonical link to the desktop page https://developers.google.com/webmasters/smartphone-sites/feature-phones -->
-  <!--
-    <link rel="canonical" href="http://www.example.com/">
-    -->
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link rel="stylesheet" href="styles/reset.css">
-  <link rel="stylesheet" href="styles/main.css">
+    #streetView {
+      width: 100%;
+      height: 100%;
+      top: 0px;
+      position: absolute;
+    }
 
+    #mapView {
+      width: 100%;
+      height: 50%;
+      top: 50%;
+      z-index: 100;
+      position: absolute;
+    }
+
+    #favoriteView {
+      width: 90%;
+      max-width: 720px;
+      height: 100%;
+      z-index: 1000;
+      position: absolute;
+    }
+
+    #favoriteView ul {
+      height: 75%;
+      overflow-y: auto;
+    }
+
+    .favoriteList {
+      padding: 10px;
+    }
+
+    .buttons {
+      bottom: 0px;
+      position: fixed;
+      z-index: 10000;
+    }
+
+    .addFavorite {
+      width: 200px;
+      left: calc(50% - 200px/2);
+      margin: 20px 0;
+    }
+
+    .favoriteContentLabel {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .login {
+      margin: 20px;
+    }
+  </style>
 </head>
 
-<body class="hidden">
-  <!-- Add your site or app content here -->
-
-  <!-- 初期画面 -->
-  <section id="ready">
-    <h1 class="top_title">
-      Mystery Tour
-    </h1>
-    <button id="go">
-      <i class="material-icons">flight_takeoff</i>
-    </button>
-  </section>
-
-  <!-- ローディング画面 -->
-  <section id="loading" class="hidden">
-    <i class="material-icons rot">autorenew</i>
-  </section>
-
-  <!-- 表示エリア -->
-  <section id="output" class="hidden">
-    <div id="pano"></div>
-    <div id="map" class="t100"></div>
-  </section>
-
-  <!-- ボタン -->
-  <section id="tool" class="hidden">
-    <button id="start">
-      <i class="material-icons">flight_takeoff</i>
-    </button>
-    <button id="map_toggle">
-      <i class="material-icons">map</i>
-    </button>
-    <button id="favorite">
-      <i class="material-icons">star</i>
-    </button>
-  </section>
-
-  <!-- モーダルエリア -->
-  <section id="modalArea" class="modalArea">
-    <div id="modalBg" class="modalBg"></div>
-    <div class="modalWrapper" id="favorite_window">
-      <div class="modalContents" id="fav_pos">
-        <!-- コンテンツエリア -->
-      </div>
-      <div class="btn">
-        <button id="back"><i class="material-icons">arrow_back</i></button>
-        <button id="add"><i class="material-icons">add</i></button>
-      </div>
-      <div id="closeModal" class="closeModal">
-        ×
-      </div>
+<body>
+  <div id="app">
+    <!-- 操作ボタン -->
+    <div class="buttons is-centered">
+      <button class="button is-dark is-large" @click="start">
+        <span class="icon">
+          <i class="fas fa-plane-departure"></i>
+        </span>
+      </button>
+      <button class="button is-dark is-large" @click="toggleMap">
+        <span class="icon">
+          <i class="fas fa-map-marked"></i>
+        </span>
+      </button>
+      <button class="button is-dark is-large" @click="toggleFavorite">
+        <span class="icon">
+          <i class="fas fa-heart"></i>
+        </span>
+      </button>
+      <button class="button is-dark is-large" @click="doLogout">
+        <span class="icon">
+          <i class="fas fa-sign-out-alt"></i>
+        </span>
+      </button>
     </div>
-    <div class="modalWrapper hidden" id="add_window">
-      <div class="modalContents input_content">
-        <h2 class="title">タイトルを入力してください*</h2>
-        <input type="text" id="title_input" class="title_edit">
-      </div>
-      <div class="btn">
-        <button class="cancel"><i class="material-icons">arrow_back</i></button>
-        <button id="done" disabled><i class="material-icons">done</i></button>
-      </div>
+    <!-- ストリートビュー -->
+    <div id="streetView" v-show="hasStreetViewAddress"></div>
+    <!-- マップ -->
+    <div id="mapView" v-show="hasStreetViewAddress&&isDisplayedMap"></div>
+    <!-- お気に入り -->
+    <div id="favoriteView" v-show="isDisplayedFavorite">
+      <ul id="favoriteList" class="menu-list">
+        <li class="favoriteList notification is-dark is-active" v-for="favoriteContent in favoriteArray">
+          <label class="favoriteContentLabel" :for=`go${favoriteContent.id}`>
+            <ul>
+              <li>{{favoriteContent.data.title}}</li>
+              <li>{{favoriteContent.data.address}}</li>
+            </ul>
+            <!-- 編集削除ボタン -->
+            <div style="min-width: 120px">
+              <label class="button is-dark is-large" :for=`edit${favoriteContent.id}`>
+                <span class="icon">
+                  <i class="fas fa-edit"></i>
+                </span>
+              </label>
+              <label class="button is-dark is-large" :for=`delete${favoriteContent.id}`>
+                <span class="icon">
+                  <i class="fas fa-trash-alt"></i>
+                </span>
+              </label>
+            </div>
+            <!-- ボタン本体 -->
+            <button class="is-hidden" :id=`go${favoriteContent.id}` :value=`${JSON.stringify(favoriteContent.data.position)}` @click="goFavorite"></button>
+            <button class="is-hidden" :id=`edit${favoriteContent.id}` :value=`${favoriteContent.id}` @click="editFavorite"></button>
+            <button class="is-hidden" :id=`delete${favoriteContent.id}` :value=`${favoriteContent.id}` @click="deleteFavorite"></button>
+          </label>
+        </li>
+      </ul>
+      <a class="addFavorite button is-dark is-large" @click="addFavorite">
+        <span class="icon">
+          <i class="fas fa-plus"></i>
+        </span>
+        <span class="icon">
+          <i class="fas fa-heart"></i>
+        </span>
+      </a>
     </div>
-    <div class="modalWrapper hidden" id="edit_window">
-      <div class="modalContents input_content">
-        <h2 class="title">タイトルを編集してください*</h2>
-        <input type="text" id="title_edit" class="title_edit">
-        <p id="address"></p>
-        <p id="latlng"></p>
-      </div>
-      <div class="btn">
-        <button class="cancel"><i class="material-icons">arrow_back</i></button>
-        <button id="set"><i class="material-icons">done</i></button>
-      </div>
+    <!-- モーダル -->
+    <div id="modal" v-show="isLoading">loading......((((っ･ω･)っ</div>
+    <!-- 初期画面 -->
+    <div id="firstView" v-show="!isLoggedIn || isFirstAccess">
+      <!-- 初期ボタン -->
+      <button class="login button is-dark is-large" v-if="isFirstAccess && isLoggedIn" @click="start">
+        <span class="icon">
+          <i class="fas fa-plane-departure"></i>
+        </span>
+      </button>
+      <button class="login button is-dark is-large" v-if="isFirstAccess && isLoggedIn" @click="doLogout">
+        <span class="icon">
+          <i class="fas fa-sign-out-alt"></i>
+        </span>
+      </button>
+      <!-- ログイン系 -->
+      <button class="login button is-dark is-large" v-if="!isLoggedIn" @click="googleLogin">
+        <span class="icon">
+          <i class="fab fa-google"></i>
+        </span>
+        <span>Google</span>
+      </button>
+      <button class="login button is-dark is-large" v-if="!isLoggedIn" @click="twitterLogin">
+        <span class="icon">
+          <i class="fab fa-twitter"></i>
+        </span>
+        <span>Twitter</span>
+      </button>
+      <button class="login button is-dark is-large" v-if="!isLoggedIn" @click="githubLogin">
+        <span class="icon">
+          <i class="fab fa-github-alt"></i>
+        </span>
+        <span>GitHub</span>
+      </button>
     </div>
+  </div>
 
-  </section>
-  <section class="super_modal hidden"></section>
-
-  <!-- jquery -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <!-- sha512 -->
-  <script src="scripts/sha512.js"></script>
-  <!-- map -->
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA1Xd3oiuXW_0dQxAi46m1GBzqnDnw8Xvo"></script>
-  <!-- firebase -->
-  <script src="https://www.gstatic.com/firebasejs/6.6.0/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/6.6.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/6.6.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/6.6.0/firebase-auth.js"></script>
+
   <script>
     var firebaseConfig = {
-      // Initialize Firebase
       apiKey: "AIzaSyAndplmHLrRdyDK8CEvK-vHea8lQIX_k-A",
       authDomain: "mysterytour-216007.firebaseapp.com",
       databaseURL: "https://mysterytour-216007.firebaseio.com",
@@ -140,25 +235,291 @@
       messagingSenderId: "1060078206004",
       appId: "1:1060078206004:web:f38b25339a8d8017641e61"
     };
-    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
-  </script>
-  <!-- build:js scripts/main.min.js -->
-  <script src="scripts/main.js"></script>
-  <!-- endbuild -->
 
-  <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
-  <script>
-    (function (i, s, o, g, r, a, m) {
-      i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
-        (i[r].q = i[r].q || []).push(arguments)
-      }, i[r].l = 1 * new Date(); a = s.createElement(o),
-        m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
-    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-    ga('create', 'UA-XXXXX-X', 'auto');
-    ga('send', 'pageview');
+    const app = new Vue({
+      el: '#app',
+      data: {
+        user: {},
+        // firestore接続用
+        db: firebase.firestore(),
+        posRef: firebase.firestore().collection('latlng'),
+        // 座標材料配列
+        latArray: [...new Array(180).keys()].map(x => x - 90),
+        lngArray: [...new Array(360).keys()].map(x => x - 180),
+        // お気に入り用
+        favoriteArray: [],
+        // コンテンツ表示用
+        mapView: null,
+        streetView: null,
+        // 表示切り替え用
+        isLoggedIn: false,
+        isFirstAccess: true,
+        isLoading: false,
+        hasStreetViewAddress: false,
+        isDisplayedMap: false,
+        isDisplayedFavorite: false
+      },
+      computed: {
+      },
+      methods: {
+        // ログイン
+        googleLogin() {
+          const googleProvider = new firebase.auth.GoogleAuthProvider();
+          this.doLogin(googleProvider);
+        },
+        twitterLogin() {
+          const twitterProvider = new firebase.auth.TwitterAuthProvider();
+          this.doLogin(twitterProvider);
+        },
+        githubLogin() {
+          const githubProvider = new firebase.auth.GithubAuthProvider();
+          this.doLogin(githubProvider);
+        },
+        doLogin(provider) {
+          this.isLoading = true;
+          firebase.auth().signInWithPopup(provider).then(result => {
+            this.isLoggedIn = true;
+          }).catch((error) => {
+            console.log(error)
+            alert('Login failed.');
+            this.isLoading = false;
+          });
+        },
+        // ログアウト
+        doLogout() {
+          const confirmLogout = confirm('Log out??');
+          if (confirmLogout == false) {
+            return false;
+          }
+          firebase.auth().signOut().then(result => {
+            console.log(result);
+            this.isLoggedIn = false;
+            this.isFirstAccess = true;
+          });
+        },
+        // スクロール
+        scrollToBottom: function (id) {
+          const scroll = document.getElementById(id);
+          scroll.scrollTop = scroll.scrollHeight;
+        },
+        // ランダム座標作成
+        createRandomLatLng: function () {
+          return {
+            lat: this.latArray[~~Math.floor(Math.random() * this.latArray.length + 1)] + Math.random(),
+            lng: this.lngArray[~~Math.floor(Math.random() * this.lngArray.length + 1)] + Math.random()
+          };
+        },
+        // ストリートビュー検索
+        serchStreetView: function () {
+          this.hasStreetViewAddress = false;
+          this.isDisplayedMap = false;
+          this.isDisplayedFavorite = false;
+          this.isLoading = true;
+          const self = this;
+          //座標をランダムに生成
+          const randomLatlng = this.createRandomLatLng();
+          // ストリートビューがあるかどうか確認
+          const svs = new google.maps.StreetViewService();
+          svs.getPanoramaByLocation(randomLatlng, 5000, (result, status) => {
+            if (status == google.maps.StreetViewStatus.OK) {
+              //ストリートビューがあれば座標を設定
+              this.loadMap(result.location.latLng);
+              this.loadStreetView(result.location.latLng);
+              // あれば表示
+              this.hasStreetViewAddress = true;
+              setTimeout(() => {
+                this.isLoading = false;
+              }, 2000);
+              console.log('ok');
+            } else {
+              // なければやり直し
+              console.log('ng');
+              self.serchStreetView();
+            }
+          });
+        },
+        // マップ設定
+        loadMap: function (latLng) {
+          this.mapView = new google.maps.Map(document.getElementById('mapView'), {
+            center: latLng,
+            zoom: 6,
+            scaleControl: true,
+            // zoomControl: false,
+            streetViewControl: true,
+            streetViewControlOptions: {
+              position: google.maps.ControlPosition.LEFT_TOP,
+            },
+            fullscreenControl: false
+          });
+        },
+        // ストリートビュー設定
+        loadStreetView: function (latLng) {
+          this.streetView = new google.maps.StreetViewPanorama(
+            document.getElementById('streetView'), {
+            position: latLng,
+            pov: {
+              heading: 34,
+              pitch: 10,
+              zoom: 0,
+            },
+            showRoadLabels: false,
+            addressControl: true,
+            motionTracking: false,
+            motionTrackingControlOptions: {
+              position: google.maps.ControlPosition.LEFT_TOP,
+            },
+            zoomControl: false,
+            panControl: false,
+            fullscreenControl: false
+          });
+          this.mapView.setStreetView(this.streetView);
+        },
+        // スタートボタン押下時の処理
+        start: function () {
+          if (!this.isFirstAccess) {
+            confirm('Go to the next??') ? this.serchStreetView() : false;
+          } else {
+            this.isFirstAccess ? this.isFirstAccess = false : false;
+            this.serchStreetView();
+          }
+        },
+        // 地図表示切り替え
+        toggleMap: function () {
+          !this.isDisplayedMap ? this.isDisplayedMap = true : this.isDisplayedMap = false;
+        },
+        // お気に入り表示切り替え
+        toggleFavorite: function () {
+          if (!this.isDisplayedFavorite) {
+            this.isDisplayedFavorite = true;
+            setTimeout(() => {
+              this.scrollToBottom('favoriteList')
+            }, 0);
+          } else {
+            this.isDisplayedFavorite = false;
+          }
+        },
+        // お気に入り追加
+        addFavorite: function () {
+          const titleName = prompt("Input name!", "");
+          if (titleName == null) {
+            return false;
+          }
+          this.isLoading = true;
+          const favoriteLatLng = { lat: this.streetView.getPosition().lat(), lng: this.streetView.getPosition().lng() }
+          // 座標から住所を取得
+          var geocoder = new google.maps.Geocoder().geocode({
+            latLng: favoriteLatLng
+          }, (results, status) => {
+            if (status == google.maps.GeocoderStatus.OK) {
+              if (results[0].geometry) {
+                // 住所を取得
+                this.posRef.add({
+                  user: this.user.uid,
+                  title: titleName,
+                  address: results[0].formatted_address,
+                  position: favoriteLatLng,
+                  timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                }).then(() => {
+                  alert('Added!!');
+                  this.isDisplayedFavorite = false;
+                  this.isLoading = false;
+                }).catch(error => {
+                  alert(error);
+                });
+              }
+            }
+          });
+        },
+        // お気に入り移動
+        goFavorite: function (e) {
+          const latLng = JSON.parse(e.target.value);
+          this.streetView.setPosition(new google.maps.LatLng(latLng.lat, latLng.lng));
+          this.mapView.panTo(new google.maps.LatLng(latLng.lat, latLng.lng));
+          this.isLoading = true;
+          this.isDisplayedFavorite = false;
+          setTimeout(() => {
+            this.isLoading = false;
+          }, 1500);
+        },
+        // お気に入り編集
+        editFavorite: function (e) {
+          const editTitleName = prompt("Input new name!", "");
+          if (editTitleName == null) {
+            return false;
+          }
+          this.isLoading = true;
+          this.posRef.doc(e.target.value).set({
+            title: editTitleName,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+          }, { merge: true }).then(() => {
+            alert('Applied!!');
+            this.isLoading = false;
+          }).catch(error => {
+            alert(error);
+            this.isLoading = false;
+          });
+        },
+        // お気に入り削除
+        deleteFavorite: function (e) {
+          const confirmResult = confirm('Are you sure??');
+          if (confirmResult == false) {
+            return false;
+          }
+          this.isLoading = true;
+          this.posRef.doc(e.target.value).delete().then(() => {
+            alert("Deleted!!");
+            this.isLoading = false;
+          }).catch((error) => {
+            alert("Error removing document: ", error);
+            this.isLoading = false;
+          });
+        }
+      },
+      created() {
+        firebase.auth().onAuthStateChanged(user => {
+          this.user = user ? user : {};
+          // firestore読み込み
+          if (this.user.uid) {
+            this.isLoggedIn = true;
+            this.posRef.where("user", "==", this.user.uid).orderBy('timestamp', 'asc').onSnapshot(querySnapshot => {
+              this.favoriteArray = [];
+              querySnapshot.forEach((doc) => {
+                this.favoriteArray.push({ id: doc.id, data: doc.data() });
+              });
+              this.isLoading = false;
+            }, error => {
+              console.log(error);
+              console.log('Detached.');
+            });
+          }
+        });
+
+      }
+    });
+
   </script>
-  <!-- Built with love using Web Starter Kit -->
+
+  <script>
+    // GoogleAnalyticsObject
+    // if ('serviceWorker' in navigator) {
+    //   navigator.serviceWorker.register('service-worker.js').then(function (registration) {
+    //     console.log('ServiceWorker registration successful with scope: ', registration.scope);
+    //   }).catch(function (err) {
+    //     console.log('ServiceWorker registration failed: ', err);
+    //   });
+    // }
+
+    // (function (i, s, o, g, r, a, m) {
+    //   i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+    //     (i[r].q = i[r].q || []).push(arguments)
+    //   }, i[r].l = 1 * new Date(); a = s.createElement(o),
+    //     m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+    // })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+    // ga('create', 'UA-XXXXX-X', 'auto');
+    // ga('send', 'pageview');
+  </script>
+
 </body>
 
 </html>
