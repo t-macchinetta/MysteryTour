@@ -1,6 +1,6 @@
 # mysterytour
 
-## <a href="https://taroosg.github.io/mysterytour/" target="_blank">Demo</a>
+## <a href="https://mysterytour.netlify.com/" target="_blank">Demo</a>
 
 ## 進捗
 ### 動作
